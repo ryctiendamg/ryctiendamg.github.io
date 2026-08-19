@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Minimercado Virtual</title>
+    <title>RyC Limpieza y Comercial</title>
+
+    <!-- Datos para la vista previa al compartir en WhatsApp y redes sociales -->
+    <meta property="og:title" content="RyC Limpieza y Comercial - Tienda Online" />
+    <meta property="og:description" content="Hacé tu pedido online rápido y fácil. Seleccioná tus productos y mandanos el pedido por WhatsApp." />
+    <meta property="og:type" content="website" />
+
     <!-- Tailwind CSS para el diseño sin renegar -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -11,7 +17,7 @@
 
     <!-- Encabezado -->
     <header class="bg-green-600 text-white p-4 sticky top-0 shadow-md flex justify-between items-center z-10">
-        <h1 class="text-xl font-bold">🛒 Mi Minimercado</h1>
+        <h1 class="text-xl font-bold">🛒 RyC Tienda</h1>
         <button onclick="toggleCarrito()" class="bg-green-700 px-3 py-1 rounded-full text-sm font-semibold hover:bg-green-800 transition">
             Changuito (<span id="cart-count">0</span>)
         </button>
@@ -81,7 +87,7 @@
     <!-- Lógica en JavaScript -->
     <script>
         // 1. Número de WhatsApp donde recibirás los pedidos (con código de país)
-        const MI_WHATSAPP = "5493434557630"; // <--- Cambiar por tu número real
+        const MI_WHATSAPP = "5493434557630"; 
 
         // 2. Base de datos con los productos de tu lista e imágenes de muestra
         const productos = [
