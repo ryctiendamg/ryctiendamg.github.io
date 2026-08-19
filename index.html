@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Minimercado Virtual</title>
+    <!-- Tailwind CSS para el diseño sin renegar -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans pb-20">
+
+    <!-- Encabezado -->
+    <header class="bg-green-600 text-white p-4 sticky top-0 shadow-md flex justify-between items-center z-10">
+        <h1 class="text-xl font-bold">🛒 Mi Minimercado</h1>
+        <button onclick="toggleCarrito()" class="bg-green-700 px-3 py-1 rounded-full text-sm font-semibold hover:bg-green-800 transition">
+            Changuito (<span id="cart-count">0</span>)
+        </button>
+    </header>
+
+    <!-- Listado de Productos -->
+    <main class="max-w-4xl mx-auto p-4">
+        <h2 class="text-lg font-bold mb-4 text-gray-700">Productos Disponibles</h2>
+        <div id="productos-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <!-- Los productos se cargan automáticamente desde JavaScript -->
+        </div>
+    </main>
+
+    <!-- Modal / Vista del Changuito -->
+    <div id="cart-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-end z-20">
+        <div class="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between overflow-y-auto">
+            <div>
+                <div class="flex justify-between items-center border-b pb-2 mb-4">
+                    <h3 class="text-xl font-bold">Tu Changuito</h3>
+                    <button onclick="toggleCarrito()" class="text-gray-500 font-bold text-2xl hover:text-gray-700">&times;</button>
+                </div>
+                <div id="cart-items" class="space-y-3">
+                    <!-- Ítems agregados -->
+                </div>
+            </div>
+
+            <div class="border-t pt-4 mt-4">
+                <div class="flex justify-between font-bold text-lg mb-4">
+                    <span>Total:</span>
+                    <span id="cart-total">$0</span>
+                </div>
+                
+                <!-- Datos del Cliente -->
+                <div class="space-y-3 mb-4">
+                    <div>
+                        <label for="nombre" class="block text-xs font-bold text-gray-700 mb-1">
+                            Tu Nombre <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required class="w-full border p-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+
+                    <div>
+                        <label for="direccion" class="block text-xs font-bold text-gray-700 mb-1">
+                            Dirección de entrega <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="direccion" placeholder="Ej: San Martín 123" required class="w-full border p-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+
+                    <div>
+                        <label for="pago" class="block text-xs font-bold text-gray-700 mb-1">
+                            Medio de Pago
+                        </label>
+                        <select id="pago" class="w-full border p-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Transferencia">Transferencia</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="enviarWhatsApp()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition">
+                    Enviar Pedido por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lógica en JavaScript -->
+    <script>
+        // 1. Número de WhatsApp donde recibirás los pedidos (con código de país)
+        const MI_WHATSAPP = "5493434557630"; // <--- Cambiar por tu número real
+
+        // 2. Base de datos con los productos de tu lista e imágenes de muestra
+        const productos = [
+            { 
+                id: 1, 
+                nombre: "Puré de Tomate Baggio 1030g", 
+                precio: 1500, 
+                categoria: "Almacen", 
+                imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWq-dIchJWheRtG-4sYA0cGcFGqFcJH5jhauMW63A8yQ&s=10" 
+            },
+            { 
+                id: 2, 
+                nombre: "Fideo Guisero Moño Sol Pampeano 500g", 
+                precio: 1200, 
+                categoria: "Almacen", 
+                imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeUJ7siyH9vG-fKhnfyu7hsL60o10qdnbKJMSryZF-cA&s=10" 
+            },
+            { 
+                id: 3, 
+                nombre: "Yerba Mate Sinceridad 500g", 
+                precio: 2200, 
+                categoria: "Almacen", 
+                imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgKLkLW7-GqG_K1NGZeSNXGsEg9tec_sBVeQqYVsxthg&s=10" 
+            },
+            { 
+                id: 4, 
+                nombre: "Yerba Mate Sinceridad 1kg", 
+                precio: 4100, 
+                categoria: "Almacen", 
+                imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ZgD2qE5UN27O92etLmrXwe9AldWOY-lMsT-Z3gdNRg&s=10" 
+            },
+            { 
+                id: 5, 
+                nombre: "Azúcar Miryam 1kg", 
+                precio: 1100, 
+                categoria: "Almacen", 
+                imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7kPBp4_8Pwy5ISMQtSGwPtVwsF6PhoMxcVnf5QGs4yQ&s=10" 
+            },
+            { 
+                id: 6, 
+                nombre: "Azúcar Miryam 2kg", 
+                precio: 2100, 
+                categoria: "Almacen", 
+                imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIg6Fx_EwG1qRqbluz2gt6fUPzGVKLY6ok0K5zEGxmmg&s=10" 
+            }
+        ];
+
+        let carrito = [];
+
+        // Cargar productos en la pantalla
+        function renderProductos() {
+            const grid = document.getElementById("productos-grid");
+            grid.innerHTML = productos.map(p => `
+                <div class="bg-white p-4 rounded-lg shadow border flex flex-col justify-between overflow-hidden">
+                    <div>
+                        <img src="${p.imagen}" alt="${p.nombre}" class="w-full h-32 object-contain rounded-md mb-3 bg-gray-100">
+                        <span class="text-xs text-gray-400 uppercase font-bold">${p.categoria}</span>
+                        <h3 class="font-bold text-gray-800 text-sm mt-1">${p.nombre}</h3>
+                        <p class="text-green-600 font-bold mt-2">$${p.precio}</p>
+                    </div>
+                    <button onclick="agregarAlCarrito(${p.id})" class="mt-3 w-full bg-blue-600 text-white text-xs py-2 rounded font-bold hover:bg-blue-700 transition">
+                        + Agregar
+                    </button>
+                </div>
+            `).join("");
+        }
+
+        // Agregar ítem al changuito
+        function agregarAlCarrito(id) {
+            const prod = productos.find(p => p.id === id);
+            const existe = carrito.find(item => item.id === id);
+
+            if (existe) {
+                existe.cantidad++;
+            } else {
+                carrito.push({ ...prod, cantidad: 1 });
+            }
+            actualizarCarrito();
+        }
+
+        // Restar una unidad
+        function restarDelCarrito(id) {
+            const existe = carrito.find(item => item.id === id);
+
+            if (existe) {
+                if (existe.cantidad > 1) {
+                    existe.cantidad--;
+                } else {
+                    eliminarDelCarrito(id);
+                    return;
+                }
+            }
+            actualizarCarrito();
+        }
+
+        // Eliminar el producto completo
+        function eliminarDelCarrito(id) {
+            carrito = carrito.filter(item => item.id !== id);
+            actualizarCarrito();
+        }
+
+        // Actualizar vista del changuito
+        function actualizarCarrito() {
+            const cartItems = document.getElementById("cart-items");
+            const cartCount = document.getElementById("cart-count");
+            const cartTotal = document.getElementById("cart-total");
+
+            cartCount.innerText = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+
+            if (carrito.length === 0) {
+                cartItems.innerHTML = `<p class="text-gray-400 text-center py-6 text-sm">El changuito está vacío</p>`;
+            } else {
+                cartItems.innerHTML = carrito.map(item => `
+                    <div class="flex justify-between items-center text-sm border-b pb-2 gap-2">
+                        <div class="flex-1">
+                            <p class="font-bold text-gray-800">${item.nombre}</p>
+                            <p class="text-gray-500 text-xs">$${item.precio} c/u — Subtotal: <span class="font-semibold text-gray-700">$${item.cantidad * item.precio}</span></p>
+                        </div>
+                        
+                        <div class="flex items-center gap-1">
+                            <button onclick="restarDelCarrito(${item.id})" class="bg-gray-200 text-gray-700 w-6 h-6 rounded font-bold hover:bg-gray-300 flex items-center justify-center">-</button>
+                            <span class="font-bold px-1 text-sm">${item.cantidad}</span>
+                            <button onclick="agregarAlCarrito(${item.id})" class="bg-blue-600 text-white w-6 h-6 rounded font-bold hover:bg-blue-700 flex items-center justify-center">+</button>
+                            <button onclick="eliminarDelCarrito(${item.id})" class="text-red-500 hover:text-red-700 ml-2 p-1" title="Quitar producto">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                `).join("");
+            }
+
+            const total = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+            cartTotal.innerText = `$${total}`;
+        }
+
+        function toggleCarrito() {
+            document.getElementById("cart-modal").classList.toggle("hidden");
+        }
+
+        // Armar el mensaje y redirigir a WhatsApp
+        function enviarWhatsApp() {
+            if (carrito.length === 0) return alert("¡El changuito está vacío!");
+            
+            const nombreInput = document.getElementById("nombre");
+            const direccionInput = document.getElementById("direccion");
+            
+            const nombre = nombreInput.value.trim();
+            const direccion = direccionInput.value.trim();
+            const pago = document.getElementById("pago").value;
+
+            if (!nombre || !direccion) {
+                alert("Por favor completá los campos obligatorios (*): Tu Nombre y Dirección.");
+                if (!nombre) nombreInput.focus();
+                else if (!direccion) direccionInput.focus();
+                return;
+            }
+
+            let mensaje = `*¡Nuevo Pedido!* 🛒\n\n`;
+            mensaje += `*Cliente:* ${nombre}\n`;
+            mensaje += `*Dirección:* ${direccion}\n`;
+            mensaje += `*Medio de Pago:* ${pago}\n\n`;
+            mensaje += `*Detalle del pedido:*\n`;
+
+            carrito.forEach(item => {
+                mensaje += `- ${item.cantidad}x ${item.nombre} ($${item.precio * item.cantidad})\n`;
+            });
+
+            const total = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+            mensaje += `\n*Total a pagar:* $${total}`;
+
+            // Abrir enlace a WhatsApp
+            const url = `https://wa.me/${MI_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, "_blank");
+        }
+
+        renderProductos();
+    </script>
+</body>
+</html>
