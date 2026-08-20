@@ -142,12 +142,15 @@
       background-color: var(--azul-ryc);
       color: white;
       border: none;
-      padding: 8px 12px;
+      padding: 10px 12px;
       border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
       width: 100%;
       transition: background 0.2s;
+      text-decoration: none;
+      display: block;
+      box-sizing: border-box;
     }
 
     .btn-agregar:hover {
@@ -220,12 +223,17 @@
       lista.forEach(prod => {
         const card = document.createElement('div');
         card.className = 'card';
+        
+        // Mensaje automático para el WhatsApp de RyC
+        const mensajeWS = encodeURIComponent(`Hola RyC! Quisiera encargar: ${prod.nombre} ($${prod.precio})`);
+        const urlWS = `https://wa.me/543434557630?text=${mensajeWS}`;
+
         card.innerHTML = `
-          <img src="${prod.img}" alt="${prod.nombre}" onerror="this.src='https://via.placeholder.com/200?text=RyC'">
+          <img src="${prod.img}" alt="${prod.nombre}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/200x160/0B3B60/FFF?text=RyC+Limpieza';">
           <div class="card-info">
             <h3>${prod.nombre}</h3>
             <div class="precio">$ ${prod.precio.toLocaleString('es-AR')}</div>
-            <button class="btn-agregar">Pedir por WhatsApp</button>
+            <a href="${urlWS}" target="_blank" class="btn-agregar">Pedir por WhatsApp</a>
           </div>
         `;
         contenedor.appendChild(card);
