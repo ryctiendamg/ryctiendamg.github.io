@@ -3,49 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RyC Productos de Limpieza</title>
+  <title>RyC Tienda</title>
   <style>
     :root {
-      --azul-ryc: #0B3B60;
-      --turquesa-ryc: #00A896;
-      --gris-fondo: #F4F7F6;
+      --verde-header: #1b5e20;
+      --azul-boton: #1565c0;
+      --verde-ws: #107c41;
+      --gris-fondo: #f5f5f5;
       --texto: #333333;
     }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--gris-fondo);
-      color: var(--texto);
-      margin: 0;
-      padding: 0;
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
 
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--gris-fondo);
+      color: var(--texto);
+    }
+
+    /* Header */
     header {
-      background-color: var(--azul-ryc);
+      background-color: var(--verde-header);
       color: white;
-      text-align: center;
-      padding: 1.5rem;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     header h1 {
       margin: 0;
-      font-size: 1.8rem;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    header p {
-      margin: 5px 0 0;
-      font-size: 0.9rem;
-      opacity: 0.9;
+    .btn-changuito-header {
+      background-color: white;
+      color: var(--verde-header);
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
-    .contenedor {
-      max-width: 1000px;
+    .badge {
+      background-color: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 7px;
+      font-size: 0.8rem;
+    }
+
+    /* Layout principal */
+    .contenedor-principal {
+      max-width: 1200px;
       margin: 20px auto;
       padding: 0 15px;
     }
 
-    /* Controles: Buscador y Filtros */
     .controles {
       display: flex;
       flex-direction: column;
@@ -57,10 +85,8 @@
       width: 100%;
       padding: 12px;
       font-size: 1rem;
-      border: 2px solid var(--azul-ryc);
-      border-radius: 8px;
-      box-sizing: border-box;
-      outline: none;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
 
     .categorias {
@@ -76,156 +102,269 @@
       padding: 8px 16px;
       border-radius: 20px;
       cursor: pointer;
-      font-weight: bold;
-      color: var(--texto);
       white-space: nowrap;
-      transition: 0.3s;
     }
 
-    .btn-cat.activo, .btn-cat:hover {
-      background-color: var(--turquesa-ryc);
+    .btn-cat.activo {
+      background-color: var(--verde-header);
       color: white;
     }
 
     /* Grilla de Productos */
     .grid-productos {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 20px;
     }
 
     .card {
       background-color: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      padding: 15px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.2s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
     }
 
     .card img {
       width: 100%;
-      height: 160px;
-      object-fit: cover;
-      background-color: #eee;
-    }
-
-    .card-info {
-      padding: 15px;
-      text-align: center;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .card-info h3 {
-      font-size: 1rem;
-      margin: 0 0 5px;
-      color: var(--azul-ryc);
-    }
-
-    .unidad-medida {
-      font-size: 0.8rem;
-      color: #666;
+      height: 140px;
+      object-fit: contain;
       margin-bottom: 10px;
     }
 
-    .precio-unitario {
-      font-size: 1.1rem;
+    .cat-tag {
+      font-size: 0.75rem;
+      color: #777;
+      text-transform: uppercase;
       font-weight: bold;
-      color: var(--turquesa-ryc);
-      margin-bottom: 10px;
     }
 
-    /* Selector de Cantidad */
-    .selector-cantidad {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-
-    .btn-cant {
-      background-color: var(--azul-ryc);
-      color: white;
-      border: none;
-      width: 30px;
-      height: 30px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 1.1rem;
-    }
-
-    .cant-input {
-      width: 45px;
-      text-align: center;
-      font-size: 1rem;
-      font-weight: bold;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 4px;
-    }
-
-    .total-card {
+    .card h3 {
       font-size: 0.95rem;
+      margin: 5px 0;
+      height: 38px;
+      overflow: hidden;
+    }
+
+    .precio {
+      font-size: 1.1rem;
       font-weight: bold;
-      margin-bottom: 10px;
-      color: var(--texto);
+      color: var(--verde-header);
+      margin: 8px 0;
     }
 
     .btn-agregar {
-      background-color: #25D366; /* Verde WhatsApp */
+      background-color: var(--azul-boton);
       color: white;
       border: none;
-      padding: 10px 12px;
+      padding: 10px;
       border-radius: 5px;
-      cursor: pointer;
       font-weight: bold;
+      cursor: pointer;
       width: 100%;
-      transition: background 0.2s;
-      text-decoration: none;
-      display: block;
-      box-sizing: border-box;
     }
 
     .btn-agregar:hover {
-      background-color: #1EBE57;
+      opacity: 0.9;
+    }
+
+    /* Drawer / Lateral del Changuito */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 20;
+    }
+
+    .changuito-panel {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 100%;
+      max-width: 380px;
+      height: 100%;
+      background-color: white;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+      z-index: 30;
+      transition: right 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .changuito-panel.abierto {
+      right: 0;
+    }
+
+    .changuito-header {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .changuito-header h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .btn-cerrar {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .changuito-body {
+      padding: 15px;
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    .item-changuito {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 8px;
+    }
+
+    .item-info {
+      font-size: 0.9rem;
+    }
+
+    .item-cant {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .btn-cant-mini {
+      background-color: #ddd;
+      border: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .changuito-footer {
+      padding: 15px;
+      border-top: 1px solid #eee;
+      background-color: #fafafa;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .form-grupo {
+      margin-bottom: 10px;
+    }
+
+    .form-grupo label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 3px;
+      font-weight: bold;
+    }
+
+    .form-grupo input, .form-grupo select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .btn-enviar-ws {
+      background-color: var(--verde-ws);
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>RyC Productos de Limpieza</h1>
-    <p>Calidad y Eficiencia para tu Hogar</p>
+    <h1>🛒 RyC Tienda</h1>
+    <button class="btn-changuito-header" onclick="toggleChanguito()">
+      🛒 Changuito <span class="badge" id="badge-cant">0</span>
+    </button>
   </header>
 
-  <div class="contenedor">
+  <div class="contenedor-principal">
+    <h2>Productos Disponibles</h2>
     
-    <!-- Filtros -->
     <div class="controles">
-      <input type="text" id="buscador" class="buscador" placeholder="Buscar producto...">
+      <input type="text" id="buscador" class="buscador" placeholder="Buscar productos...">
       <div class="categorias">
         <button class="btn-cat activo" onclick="filtrarCategoria('todos', this)">Todos</button>
-        <button class="btn-cat" onclick="filtrarCategoria('liquidos', this)">Líquidos y Desinfectantes</button>
+        <button class="btn-cat" onclick="filtrarCategoria('liquidos', this)">Líquidos</button>
         <button class="btn-cat" onclick="filtrarCategoria('trapos', this)">Trapos y Paños</button>
         <button class="btn-cat" onclick="filtrarCategoria('esponjas', this)">Esponjas y Fibras</button>
         <button class="btn-cat" onclick="filtrarCategoria('accesorios', this)">Accesorios</button>
       </div>
     </div>
 
-    <!-- Catálogo -->
     <div class="grid-productos" id="catalogo"></div>
+  </div>
 
+  <!-- Overlay y Panel Changuito -->
+  <div class="overlay" id="overlay" onclick="toggleChanguito()"></div>
+
+  <div class="changuito-panel" id="changuito-panel">
+    <div class="changuito-header">
+      <h2>Tu Changuito</h2>
+      <button class="btn-cerrar" onclick="toggleChanguito()">&times;</button>
+    </div>
+
+    <div class="changuito-body" id="changuito-items">
+      <!-- Se carga dinámicamente -->
+    </div>
+
+    <div class="changuito-footer">
+      <div class="total-row">
+        <span>Total:</span>
+        <span id="total-monto">$0</span>
+      </div>
+
+      <div class="form-grupo">
+        <label>Tu Nombre *</label>
+        <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
+      </div>
+
+      <div class="form-grupo">
+        <label>Dirección de entrega *</label>
+        <input type="text" id="cliente-direccion" placeholder="Ej: San Martín 123">
+      </div>
+
+      <div class="form-grupo">
+        <label>Medio de Pago</label>
+        <select id="cliente-pago">
+          <option value="Efectivo">Efectivo</option>
+          <option value="Transferencia">Transferencia</option>
+        </select>
+      </div>
+
+      <button class="btn-enviar-ws" onclick="enviarPedidoWhatsApp()">Enviar Pedido por WhatsApp</button>
+    </div>
   </div>
 
   <script>
@@ -253,71 +392,134 @@
       { id: 21, nombre: "Paño Amarillo", precio: 1000, cat: "trapos", tipo: "Unid.", img: "pano-amarillo.jpg" }
     ];
 
+    let changuito = [];
     let categoriaActual = 'todos';
 
     function renderizar(lista) {
       const contenedor = document.getElementById('catalogo');
       contenedor.innerHTML = '';
-      
-      if(lista.length === 0) {
-        contenedor.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No se encontraron productos.</p>';
-        return;
-      }
 
       lista.forEach(prod => {
         const card = document.createElement('div');
         card.className = 'card';
-        
         card.innerHTML = `
-          <img src="${prod.img}" alt="${prod.nombre}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/200x160/0B3B60/FFF?text=RyC+Limpieza';">
-          <div class="card-info">
-            <h3>${prod.nombre}</h3>
-            <div class="unidad-medida">Precio por ${prod.tipo}</div>
-            <div class="precio-unitario">$ ${prod.precio.toLocaleString('es-AR')}</div>
-            
-            <!-- Cantidad -->
-            <div class="selector-cantidad">
-              <button class="btn-cant" onclick="cambiarCant(${prod.id}, -1)">-</button>
-              <input type="number" id="cant-${prod.id}" value="1" min="1" class="cant-input" readonly>
-              <button class="btn-cant" onclick="cambiarCant(${prod.id}, 1)">+</button>
-            </div>
-
-            <div class="total-card" id="total-${prod.id}">Total: $ ${prod.precio.toLocaleString('es-AR')}</div>
-            
-            <a id="btn-ws-${prod.id}" href="#" target="_blank" class="btn-agregar">Pedir por WhatsApp</a>
-          </div>
+          <img src="${prod.img}" alt="${prod.nombre}" onerror="this.onerror=null; this.src='https://placehold.co/200x140/1b5e20/FFF?text=RyC';">
+          <div class="cat-tag">${prod.cat}</div>
+          <h3>${prod.nombre} (${prod.tipo})</h3>
+          <div class="precio">$ ${prod.precio.toLocaleString('es-AR')}</div>
+          <button class="btn-agregar" onclick="agregarAlChanguito(${prod.id})">+ Agregar</button>
         `;
         contenedor.appendChild(card);
-        actualizarLinkWS(prod.id);
       });
     }
 
-    // Modificar cantidad
-    function cambiarCant(id, cambio) {
-      const input = document.getElementById(`cant-${id}`);
-      let valor = parseInt(input.value) + cambio;
-      if (valor < 1) valor = 1;
-      input.value = valor;
-
-      actualizarLinkWS(id);
-    }
-
-    // Actualizar precio total y mensaje de WhatsApp
-    function actualizarLinkWS(id) {
+    function agregarAlChanguito(id) {
       const prod = productos.find(p => p.id === id);
-      const cant = parseInt(document.getElementById(`cant-${id}`).value);
-      const total = prod.precio * cant;
+      const enChanguito = changuito.find(item => item.id === id);
 
-      // Actualizar texto del total
-      document.getElementById(`total-${id}`).innerText = `Total: $ ${total.toLocaleString('es-AR')}`;
+      if (enChanguito) {
+        enChanguito.cantidad++;
+      } else {
+        changuito.push({ ...prod, cantidad: 1 });
+      }
 
-      // Actualizar Link de WhatsApp
-      const mensajeWS = encodeURIComponent(`Hola RyC! Quisiera encargar: ${cant} ${prod.tipo} de ${prod.nombre} (Total: $${total})`);
-      const urlWS = `https://wa.me/543434557630?text=${mensajeWS}`;
-      document.getElementById(`btn-ws-${id}`).href = urlWS;
+      actualizarChanguitoUI();
     }
 
-    // Filtrar por categoría
+    function cambiarCantidadChanguito(id, cambio) {
+      const item = changuito.find(i => i.id === id);
+      if (item) {
+        item.cantidad += cambio;
+        if (item.cantidad <= 0) {
+          changuito = changuito.filter(i => i.id !== id);
+        }
+      }
+      actualizarChanguitoUI();
+    }
+
+    function actualizarChanguitoUI() {
+      const contenedorItems = document.getElementById('changuito-items');
+      contenedorItems.innerHTML = '';
+      let total = 0;
+      let totalCant = 0;
+
+      if (changuito.length === 0) {
+        contenedorItems.innerHTML = '<p style="text-align:center; color:#888;">El changuito está vacío.</p>';
+      } else {
+        changuito.forEach(item => {
+          const subtotal = item.precio * item.cantidad;
+          total += subtotal;
+          totalCant += item.cantidad;
+
+          const div = document.createElement('div');
+          div.className = 'item-changuito';
+          div.innerHTML = `
+            <div class="item-info">
+              <strong>${item.nombre}</strong>
+              <div>$${item.precio} x ${item.cantidad} ${item.tipo} = $${subtotal}</div>
+            </div>
+            <div class="item-cant">
+              <button class="btn-cant-mini" onclick="cambiarCantidadChanguito(${item.id}, -1)">-</button>
+              <span>${item.cantidad}</span>
+              <button class="btn-cant-mini" onclick="cambiarCantidadChanguito(${item.id}, 1)">+</button>
+            </div>
+          `;
+          contenedorItems.appendChild(div);
+        });
+      }
+
+      document.getElementById('total-monto').innerText = `$ ${total.toLocaleString('es-AR')}`;
+      document.getElementById('badge-cant').innerText = totalCant;
+    }
+
+    function toggleChanguito() {
+      const panel = document.getElementById('changuito-panel');
+      const overlay = document.getElementById('overlay');
+      const estaAbierto = panel.classList.contains('abierto');
+
+      if (estaAbierto) {
+        panel.classList.remove('abierto');
+        overlay.style.display = 'none';
+      } else {
+        panel.classList.add('abierto');
+        overlay.style.display = 'block';
+      }
+    }
+
+    function enviarPedidoWhatsApp() {
+      if (changuito.length === 0) {
+        alert("El changuito está vacío. Agregá algún producto primero.");
+        return;
+      }
+
+      const nombre = document.getElementById('cliente-nombre').value.trim();
+      const direccion = document.getElementById('cliente-direccion').value.trim();
+      const pago = document.getElementById('cliente-pago').value;
+
+      if (!nombre || !direccion) {
+        alert("Por favor completá tu nombre y dirección.");
+        return;
+      }
+
+      let mensaje = `*Nuevo Pedido - RyC Limpieza*\n\n`;
+      mensaje += `👤 *Cliente:* ${nombre}\n`;
+      mensaje += `📍 *Dirección:* ${direccion}\n`;
+      mensaje += `💳 *Pago:* ${pago}\n\n`;
+      mensaje += `🛒 *Detalle del Pedido:*\n`;
+
+      let total = 0;
+      changuito.forEach(i => {
+        const subtotal = i.precio * i.cantidad;
+        total += subtotal;
+        mensaje += `• ${i.cantidad} ${i.tipo} - ${i.nombre} ($${subtotal})\n`;
+      });
+
+      mensaje += `\n*Total a pagar: $${total}*`;
+
+      const url = `https://wa.me/543434557630?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
+    }
+
     function filtrarCategoria(cat, btn) {
       categoriaActual = cat;
       document.querySelectorAll('.btn-cat').forEach(b => b.classList.remove('activo'));
@@ -325,7 +527,6 @@
       aplicarFiltros();
     }
 
-    // Buscador en tiempo real
     document.getElementById('buscador').addEventListener('input', aplicarFiltros);
 
     function aplicarFiltros() {
@@ -338,8 +539,8 @@
       renderizar(filtrados);
     }
 
-    // Carga inicial
     renderizar(productos);
+    actualizarChanguitoUI();
   </script>
 </body>
 </html>
