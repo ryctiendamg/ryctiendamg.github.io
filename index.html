@@ -90,7 +90,7 @@
     /* Grilla de Productos */
     .grid-productos {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 20px;
     }
 
@@ -127,19 +127,63 @@
 
     .card-info h3 {
       font-size: 1rem;
-      margin: 0 0 10px;
+      margin: 0 0 5px;
       color: var(--azul-ryc);
     }
 
-    .precio {
-      font-size: 1.2rem;
+    .unidad-medida {
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .precio-unitario {
+      font-size: 1.1rem;
       font-weight: bold;
       color: var(--turquesa-ryc);
       margin-bottom: 10px;
     }
 
-    .btn-agregar {
+    /* Selector de Cantidad */
+    .selector-cantidad {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .btn-cant {
       background-color: var(--azul-ryc);
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .cant-input {
+      width: 45px;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: bold;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 4px;
+    }
+
+    .total-card {
+      font-size: 0.95rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--texto);
+    }
+
+    .btn-agregar {
+      background-color: #25D366; /* Verde WhatsApp */
       color: white;
       border: none;
       padding: 10px 12px;
@@ -154,7 +198,7 @@
     }
 
     .btn-agregar:hover {
-      background-color: var(--turquesa-ryc);
+      background-color: #1EBE57;
     }
   </style>
 </head>
@@ -186,27 +230,27 @@
 
   <script>
     const productos = [
-      { id: 1, nombre: "Lavandina", precio: 700, cat: "liquidos", img: "lavandina.jpg" },
-      { id: 2, nombre: "Jabón Líquido Skip Ultra", precio: 2200, cat: "liquidos", img: "jabon-liquido.jpg" },
-      { id: 3, nombre: "Desinfectante Limón", precio: 700, cat: "liquidos", img: "desinfectante.jpg" },
-      { id: 4, nombre: "Desinfectante Lavanda", precio: 700, cat: "liquidos", img: "desinfectante.jpg" },
-      { id: 5, nombre: "Desinfectante Pino", precio: 700, cat: "liquidos", img: "desinfectante.jpg" },
-      { id: 6, nombre: "Desinfectante Lisonform", precio: 700, cat: "liquidos", img: "desinfectante.jpg" },
-      { id: 7, nombre: "Desinfectante Súper Marina", precio: 1000, cat: "liquidos", img: "desinfectante.jpg" },
-      { id: 8, nombre: "Detergente Premium Limón", precio: 2000, cat: "liquidos", img: "detergente.jpg" },
-      { id: 9, nombre: "Quita Sarro", precio: 2100, cat: "liquidos", img: "quita-sarro.jpg" },
-      { id: 10, nombre: "Limpia Vidrios", precio: 1800, cat: "liquidos", img: "limpia-vidrio.jpg" },
-      { id: 11, nombre: "Trapo de Piso 50X50", precio: 2000, cat: "trapos", img: "trapos-de-pisos.jpg" },
-      { id: 12, nombre: "Trapo de Piso 50X60", precio: 2500, cat: "trapos", img: "trapos-de-pisos.jpg" },
-      { id: 13, nombre: "Trapo de Piso 50X70", precio: 3000, cat: "trapos", img: "trapos-de-pisos.jpg" },
-      { id: 14, nombre: "Fibra Esponja Cuadriculada", precio: 900, cat: "esponjas", img: "fibra-esponja.jpg" },
-      { id: 15, nombre: "Fibra Esponja Plateada", precio: 1900, cat: "esponjas", img: "fibra-esponja.jpg" },
-      { id: 16, nombre: "Esponja de Acero 10g", precio: 700, cat: "esponjas", img: "esponja-de-acero.jpg" },
-      { id: 17, nombre: "Esponja de Acero 30g", precio: 1200, cat: "esponjas", img: "esponja-de-acero.jpg" },
-      { id: 18, nombre: "Escobillón Cernicalado", precio: 4000, cat: "accesorios", img: "escobillon.jpg" },
-      { id: 19, nombre: "Rejilla Pabilo", precio: 1300, cat: "trapos", img: "rejilla.jpg" },
-      { id: 20, nombre: "Rejilla Esponja", precio: 2700, cat: "trapos", img: "rejilla.jpg" },
-      { id: 21, nombre: "Paño Amarillo", precio: 1000, cat: "trapos", img: "pano-amarillo.jpg" }
+      { id: 1, nombre: "Lavandina", precio: 700, cat: "liquidos", tipo: "Lts", img: "lavandina.jpg" },
+      { id: 2, nombre: "Jabón Líquido Skip Ultra", precio: 2200, cat: "liquidos", tipo: "Lts", img: "jabon-liquido.jpg" },
+      { id: 3, nombre: "Desinfectante Limón", precio: 700, cat: "liquidos", tipo: "Lts", img: "desinfectante.jpg" },
+      { id: 4, nombre: "Desinfectante Lavanda", precio: 700, cat: "liquidos", tipo: "Lts", img: "desinfectante.jpg" },
+      { id: 5, nombre: "Desinfectante Pino", precio: 700, cat: "liquidos", tipo: "Lts", img: "desinfectante.jpg" },
+      { id: 6, nombre: "Desinfectante Lisonform", precio: 700, cat: "liquidos", tipo: "Lts", img: "desinfectante.jpg" },
+      { id: 7, nombre: "Desinfectante Súper Marina", precio: 1000, cat: "liquidos", tipo: "Lts", img: "desinfectante.jpg" },
+      { id: 8, nombre: "Detergente Premium Limón", precio: 2000, cat: "liquidos", tipo: "Lts", img: "detergente.jpg" },
+      { id: 9, nombre: "Quita Sarro", precio: 2100, cat: "liquidos", tipo: "Lts", img: "quita-sarro.jpg" },
+      { id: 10, nombre: "Limpia Vidrios", precio: 1800, cat: "liquidos", tipo: "Lts", img: "limpia-vidrio.jpg" },
+      { id: 11, nombre: "Trapo de Piso 50X50", precio: 2000, cat: "trapos", tipo: "Unid.", img: "trapos-de-pisos.jpg" },
+      { id: 12, nombre: "Trapo de Piso 50X60", precio: 2500, cat: "trapos", tipo: "Unid.", img: "trapos-de-pisos.jpg" },
+      { id: 13, nombre: "Trapo de Piso 50X70", precio: 3000, cat: "trapos", tipo: "Unid.", img: "trapos-de-pisos.jpg" },
+      { id: 14, nombre: "Fibra Esponja Cuadriculada", precio: 900, cat: "esponjas", tipo: "Unid.", img: "fibra-esponja.jpg" },
+      { id: 15, nombre: "Fibra Esponja Plateada", precio: 1900, cat: "esponjas", tipo: "Unid.", img: "fibra-esponja.jpg" },
+      { id: 16, nombre: "Esponja de Acero 10g", precio: 700, cat: "esponjas", tipo: "Unid.", img: "esponja-de-acero.jpg" },
+      { id: 17, nombre: "Esponja de Acero 30g", precio: 1200, cat: "esponjas", tipo: "Unid.", img: "esponja-de-acero.jpg" },
+      { id: 18, nombre: "Escobillón Cernicalado", precio: 4000, cat: "accesorios", tipo: "Unid.", img: "escobillon.jpg" },
+      { id: 19, nombre: "Rejilla Pabilo", precio: 1300, cat: "trapos", tipo: "Unid.", img: "rejilla.jpg" },
+      { id: 20, nombre: "Rejilla Esponja", precio: 2700, cat: "trapos", tipo: "Unid.", img: "rejilla.jpg" },
+      { id: 21, nombre: "Paño Amarillo", precio: 1000, cat: "trapos", tipo: "Unid.", img: "pano-amarillo.jpg" }
     ];
 
     let categoriaActual = 'todos';
@@ -224,20 +268,53 @@
         const card = document.createElement('div');
         card.className = 'card';
         
-        // Mensaje automático para el WhatsApp de RyC
-        const mensajeWS = encodeURIComponent(`Hola RyC! Quisiera encargar: ${prod.nombre} ($${prod.precio})`);
-        const urlWS = `https://wa.me/543434557630?text=${mensajeWS}`;
-
         card.innerHTML = `
           <img src="${prod.img}" alt="${prod.nombre}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/200x160/0B3B60/FFF?text=RyC+Limpieza';">
           <div class="card-info">
             <h3>${prod.nombre}</h3>
-            <div class="precio">$ ${prod.precio.toLocaleString('es-AR')}</div>
-            <a href="${urlWS}" target="_blank" class="btn-agregar">Pedir por WhatsApp</a>
+            <div class="unidad-medida">Precio por ${prod.tipo}</div>
+            <div class="precio-unitario">$ ${prod.precio.toLocaleString('es-AR')}</div>
+            
+            <!-- Cantidad -->
+            <div class="selector-cantidad">
+              <button class="btn-cant" onclick="cambiarCant(${prod.id}, -1)">-</button>
+              <input type="number" id="cant-${prod.id}" value="1" min="1" class="cant-input" readonly>
+              <button class="btn-cant" onclick="cambiarCant(${prod.id}, 1)">+</button>
+            </div>
+
+            <div class="total-card" id="total-${prod.id}">Total: $ ${prod.precio.toLocaleString('es-AR')}</div>
+            
+            <a id="btn-ws-${prod.id}" href="#" target="_blank" class="btn-agregar">Pedir por WhatsApp</a>
           </div>
         `;
         contenedor.appendChild(card);
+        actualizarLinkWS(prod.id);
       });
+    }
+
+    // Modificar cantidad
+    function cambiarCant(id, cambio) {
+      const input = document.getElementById(`cant-${id}`);
+      let valor = parseInt(input.value) + cambio;
+      if (valor < 1) valor = 1;
+      input.value = valor;
+
+      actualizarLinkWS(id);
+    }
+
+    // Actualizar precio total y mensaje de WhatsApp
+    function actualizarLinkWS(id) {
+      const prod = productos.find(p => p.id === id);
+      const cant = parseInt(document.getElementById(`cant-${id}`).value);
+      const total = prod.precio * cant;
+
+      // Actualizar texto del total
+      document.getElementById(`total-${id}`).innerText = `Total: $ ${total.toLocaleString('es-AR')}`;
+
+      // Actualizar Link de WhatsApp
+      const mensajeWS = encodeURIComponent(`Hola RyC! Quisiera encargar: ${cant} ${prod.tipo} de ${prod.nombre} (Total: $${total})`);
+      const urlWS = `https://wa.me/543434557630?text=${mensajeWS}`;
+      document.getElementById(`btn-ws-${id}`).href = urlWS;
     }
 
     // Filtrar por categoría
