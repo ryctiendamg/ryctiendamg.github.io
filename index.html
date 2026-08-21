@@ -43,7 +43,15 @@
       font-size: 1.3rem;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+    }
+
+    /* Estilo para el Logo RyC en el header */
+    .logo-header {
+      height: 35px;
+      width: auto;
+      object-fit: contain;
+      border-radius: 4px;
     }
 
     .btn-changuito-header {
@@ -303,7 +311,10 @@
 <body>
 
   <header>
-    <h1>🛒 RyC Tienda</h1>
+    <h1>
+      <img src="logo.png" alt="RyC Logo" class="logo-header" onerror="this.onerror=null; this.src='https://placehold.co/40x40/1b5e20/FFF?text=RyC';">
+      RyC Tienda
+    </h1>
     <button class="btn-changuito-header" onclick="toggleChanguito()">
       🛒 Changuito <span class="badge" id="badge-cant">0</span>
     </button>
